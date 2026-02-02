@@ -84,7 +84,7 @@
             padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 20px 40px rgba(148, 163, 184, 0.1);
-            border: 1px solid #e2e8f0;
+            border: #0c0f1b 1px solid;
         }
 
         .create-header {
@@ -164,9 +164,8 @@
         .create-btn {
             flex: 1;
             padding: 0.875rem 1rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #a3c1f1 0%, #98f3d0 100%);
             color: #ffffff;
-            border: none;
             border-radius: 8px;
             font-size: 0.875rem;
             font-weight: 600;
@@ -174,6 +173,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             letter-spacing: 0.025em;
+            border: #0c0f1b 1px solid;
         }
 
         .create-btn:hover {
@@ -190,7 +190,7 @@
             padding: 0.875rem 1rem;
             background: #f8fafc;
             color: #64748b;
-            border: 2px solid #e2e8f0;
+            border: #0c0f1b 1px solid;
             border-radius: 8px;
             font-size: 0.875rem;
             font-weight: 600;
@@ -200,12 +200,6 @@
             text-decoration: none;
             text-align: center;
             letter-spacing: 0.025em;
-        }
-
-        .cancel-btn:hover {
-            background: #f1f5f9;
-            border-color: #cbd5e1;
-            color: #475569;
         }
 
         .errors {

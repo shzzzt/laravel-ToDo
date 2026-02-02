@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,7 +27,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(148, 163, 184, 0.1);
             margin-bottom: 2rem;
-            border: 1px solid #e2e8f0;
+            border: #0c0f1b 1px solid;  
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -70,6 +71,7 @@
             transition: all 0.2s ease;
             font-family: inherit;
             font-size: inherit;
+            border: #0c0f1b 1px solid;
         }
 
         .logout-btn:hover {
@@ -84,7 +86,7 @@
             padding: 2.5rem;
             border-radius: 16px;
             box-shadow: 0 20px 40px rgba(148, 163, 184, 0.1);
-            border: 1px solid #e2e8f0;
+            border: #0c0f1b 1px solid;
         }
 
         .profile-header {
@@ -103,6 +105,10 @@
         .profile-header p {
             color: #64748b;
             font-size: 0.875rem;
+        }
+        .profile-pic {
+            display: flex; 
+            align-items: center;       
         }
 
         .form-group {
@@ -144,7 +150,7 @@
         .update-btn {
             width: 100%;
             padding: 0.875rem 1rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #a3c1f1 0%, #98f3d0 100%);
             color: #ffffff;
             border: none;
             border-radius: 8px;
@@ -164,6 +170,19 @@
         .update-btn:active {
             transform: translateY(0);
         }
+
+        .upload-pic-btn {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: inherit;
+        }
+        
 
         .success-message {
             background: #f0fdf4;
@@ -252,9 +271,9 @@
 
 <body>
     <nav class="nav">
-        <h1>Task Manager</h1>
+        <h1>To do list!</h1>
         <div class="nav-links">
-            <a href="/tasks">Tasks</a>
+            <a href="/tasks">To-do</a>
             <a href="/profile">Profile</a>
             <form method="POST" action="/logout" style="display: inline;">
                 @csrf
@@ -287,6 +306,14 @@
 
         <div class="current-info">
             <h3>Current Information</h3>
+            <div class="profile-pic">
+                @if($user && $user->profile_image && Storage::disk('public')->exists($user->profile_image))
+                    <img src="{{ asset('storage/' . $user->profile_image) }}" alt="Profile Image" width="150">
+                @else
+                    <img src="{{ asset('default-avatar.png') }}" alt="Default Image" width="150">
+                @endif
+            </div>
+
             <div class="info-item">
                 <span class="info-label">Name:</span>
                 <span class="info-value">{{ $user->name }}</span>
@@ -296,14 +323,23 @@
                 <span class="info-value">{{ $user->email }}</span>
             </div>
         </div>
-
-        <form method="POST" action="{{ route('profile.update') }}">
+        <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
             @csrf
+            <div class="form-group">
+                <label for="profile_image">Choose Profile Image</label>
+                <input type="file" name="profile_image" id="profile_image" accept="image/*">
+                @if($user->profile_image)
+                    <p style="margin-top: 0.5rem; font-size: 0.75rem; color: #64748b;">
+                        Current: <a href="{{ asset('storage/' . $user->profile_pic) }}" target="_blank">{{ basename($user->pfp) }}</a>
+                    </p>
+                @endif
+            </div>
 
             <div class="form-group">
                 <label for="name">Full Name</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required>
             </div>
+        
 
             <div class="form-group">
                 <label for="email">Email Address</label>

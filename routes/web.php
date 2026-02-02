@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/tasks');
 });
 
 use App\Http\Controllers\AuthController;
@@ -23,9 +23,9 @@ Route::middleware('auth.check')->group(function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store'); //post because it creates a new resource
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show'); //get because it retrieves a resource
     Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit'); //get because it shows the edit form
-    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update'); //put because it updates an existing resource
-    Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy'); //delete because it removes a resource
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update'); //put because it updates a resource
+    Route::patch('/tasks/{task}/mark-done', [TaskController::class, 'markAsDone'])->name('tasks.markAsDone'); //patch because it updates part of an existing resource
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show'); //get because it retrieves a resource
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update'); //post because it changes server state
-});
+    });

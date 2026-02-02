@@ -64,12 +64,22 @@ class TaskController extends Controller
         return redirect('/tasks'); //REDIRECT to tasks list if task not found or unauthorized
     }
 
-    public function destroy($id)
-    { // delete a task
+      // public function destroy($id)
+    // { // delete a task
+    //     $task = Task::find($id); //retrieve task by id
+    //     if ($task && $task->user_id == Session::get('user_id')) { //check if task exists and belongs to logged-in user
+    //         $task->delete(); //delete task from DB
+    //     }
+    //     return redirect('/tasks'); //REDIRECT to tasks list
+    // }
+
+    public function markAsDone($id)
+    { // mark task as done
         $task = Task::find($id); //retrieve task by id
         if ($task && $task->user_id == Session::get('user_id')) { //check if task exists and belongs to logged-in user
-            $task->delete(); //delete task from DB
-        }
-        return redirect('/tasks'); //REDIRECT to tasks list
+            $task->status = 'completed';
+            $task->save(); //save changes to DB
+        }   
+        return redirect('/tasks')->with('success', 'Task marked as done!'); //REDIRECT to tasks list
     }
 }

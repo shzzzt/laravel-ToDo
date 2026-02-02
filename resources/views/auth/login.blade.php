@@ -14,10 +14,10 @@
         }
 
         body {
-            font-family: 'JetBrains Mono', 'Fira Code', 'Source Code Pro', monospace;
+            font-family: 'JetBrains Mono',  monospace;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             min-height: 100vh;
-            display: flex;
+            display: flex; /* Use flexbox for centering */
             justify-content: center;
             align-items: center;
             padding: 20px;
@@ -42,8 +42,8 @@
             color: #1e293b;
             font-size: 1.75rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem; /* Adjusted margin for spacing */
+            letter-spacing: -0.025em; /* Slightly tighter letter spacing */
         }
 
         .login-header p {
@@ -95,7 +95,7 @@
             border-radius: 8px;
             font-size: 0.875rem;
             font-weight: 600;
-            font-family: inherit;
+            font-family: inherit; /*inherit font from body*/
             cursor: pointer;
             transition: all 0.2s ease;
             letter-spacing: 0.025em;

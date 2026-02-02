@@ -136,14 +136,9 @@
             padding: 1.5rem;
         }
 
-        .task-title {
-            color: #1e293b;
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+        .task-title.completed {
+            text-decoration: line-through;
+            color: #94a3b8;
         }
 
         .task-status {
@@ -183,9 +178,7 @@
         .task-actions {
             display: flex;
             gap: 0.5rem;
-            padding: 1rem 1.5rem;
-            background: #f8fafc;
-            border-top: 1px solid #e2e8f0;
+            padding: 0rem 1rem;
         }
 
         .task-actions a {
@@ -299,15 +292,15 @@
 
         @if(session('success'))
         <div class="success-message">
-            {{ session('success') }}
+            {{ session('success') }} <!--captures success message from session-->
         </div>
         @endif
 
         @if($tasks->count() > 0)
-        @foreach($tasks as $task)
+        @foreach($tasks as $task) <!--loop through tasks-->
         <div class="task-card">
             <div class="task-content">
-                <div class="task-title">
+                <div class="task-title {{ $task->status == 'completed' ? 'completed' : '' }}">
                     {{ $task->title }}
                     <span class="task-status {{ $task->status }}">
                         {{ ucfirst($task->status) }}
@@ -319,7 +312,7 @@
                 </div>
                 @endif
                 <div class="task-meta">
-                    <span>Created: {{ $task->created_at->format('M j, Y') }}</span>
+                    <span>Created: {{ $task->created_at->format('M j, Y') }}</span> 
                     @if($task->updated_at != $task->created_at)
                     <span>Updated: {{ $task->updated_at->format('M j, Y') }}</span>
                     @endif
@@ -327,17 +320,17 @@
             </div>
             <div class="task-actions">
                 <a href="{{ route('tasks.edit', $task) }}" class="edit-btn">Edit</a>
-                <form method="POST" action="{{ route('tasks.destroy', $task) }}" style="display: inline;">
+                <form method="POST" action="{{ route('tasks.markAsDone', $task) }}" style="display: inline;">
                     @csrf
-                    @method('DELETE')
-                    <button type="submit" class="delete-btn" style="border: none; background: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.875rem; font-weight: 500; transition: all 0.2s ease;" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                    @method('PATCH')
+                    <button type="submit" class="delete-btn" style="border: none; background: none; cursor: pointer; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.875rem; font-weight: 500; transition: all 0.2s ease;">Mark as Done</button>
                 </form>
             </div>
         </div>
         @endforeach
         @else
         <div class="empty-state">
-            <h3>No tasks yet</h3>
+            <h3>No tasks yet</h3> 
             <p>Get started by creating your first task!</p>
             <a href="{{ route('tasks.create') }}" class="add-task-btn" style="display: inline-block; margin-top: 1rem;">Create Your First Task</a>
         </div>

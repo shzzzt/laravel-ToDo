@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -17,23 +18,58 @@ class ProfileController extends Controller
     }
 
     public function update(Request $request)
-    {// update user profile -> redirect back with success message
-        $user = User::find(Session::get('user_id')); //retrieve user object by id
+{
+    $user = User::find(Session::get('user_id'));
 
-        $request->validate([ //validate input data
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-        ]);
-        // update user details
-        $user->name = $request->name; //request->name gets the 'name' input from the request
-        $user->email = $request->email;
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|max:255',
+        'profile_image' => 'image|mimes:jpeg,png,jpg,gif', // Changed to nullable
+    ]);
 
-        if ($request->filled('password')) { //if password field is filled, update password
-            $user->password = Hash::make($request->password); //hash the new password
-        }
+    $user->name = $request->name;
+    $user->email = $request->email;
 
-        $user->save(); //save changes to DB
-        //back() redirects the user back to the previous page
-        return back()->with('success', 'Profile updated successfully'); //redirect back with success message
+    if ($request->filled('password')) {
+        $user->password = Hash::make($request->password);
     }
+
+    // Handle profile picture upload
+    if ($request->hasFile('profile_image')) {
+        // Delete old profile picture if exists
+        if ($user->profile_image && Storage::disk('public')->exists($user->profile_image)) {
+            Storage::disk('public')->delete($user->profile_image);
+        }
+        
+        // Store new profile picture
+        $path = $request->file('profile_image')->store('profile_image', 'public');
+        $user->profile_image = $path;
+        $user->save();
+    }
+
+    $user->save();
+    return back()->with('success', 'Profile updated successfully');
 }
+
+    // public function upload(Request $request) {
+    //     $user = User::find(Session::get('user_id'));//retrieve user object by id
+
+    //     $request->validate([ //validate input data
+    //         'pfp' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //     ]);
+
+    //     if ($request->hasFile('pfp')) {
+    //         $image = $request->file('pfp');
+    //         $name = time().'_'.$image->getClientOriginalName();
+    //         $path = $request->file(key: "pfp")->store(path:'pfp', options: 'public');
+    //         $user->pfp= $path;
+    //         $user->save();
+
+    //     if ($user->pfp) {
+    //         Storage::disk('public')->delete($user->profile_image);
+    //     }
+    // }
+    //     return back()->with('success', 'Profile image uploaded successfully!');
+    // }
+}
+
